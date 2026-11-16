@@ -1,47 +1,80 @@
-# CALOOPS v2.0 — Ultimate Logic, Loops & Algorithmic Scientific Calculator
+# CALOOPS v2.0 — Full-Stack MERN + Python Logic & Loops Scientific Calculator
 
-An interactive, menu-driven Python CLI calculator and algorithmic sandbox crafted to help you **master programming logic, boolean algebra, bitwise tricks, and every major loop paradigm** with live, step-by-step execution traces.
-
-Every operation in **CALOOPS v2.0** outputs both the final answer and a **Loop & Logic Trace** detailing each iteration (`for`, `while`, 2D/3D nested loops), stack state, accumulator update, guard clause, and boolean condition evaluation.
+A complete **MERN Stack (MongoDB, Express.js, React, Node.js)** web application and **Python CLI suite** designed to help you master programming logic, boolean algebra, bitwise tricks, and every major loop paradigm (`for`, `while`, 2D/3D nested loops, Shunting-Yard RPN stack loops, numerical calculus loops, and convergence loops) with **real-time step-by-step execution tracing**.
 
 ---
 
-## All 15+ Modules & Loop/Logic Patterns
+## Architecture Overview
 
-| # | Module | Operations Included | Logic & Loop Paradigms Demonstrated |
-| :- | :--- | :--- | :--- |
-| **1** | **Basic Arithmetic** | `+`, `-`, `*`, `/`, `//`, `%`, `**` | `if / elif / else` dispatch, zero-division guard clauses |
-| **2** | **Loop-Driven Math** | Multiply, Divide (`Q, R`), Power | `for` accumulator loop, `while remainder >= divisor` subtraction loop, XOR sign logic `(a < 0) ^ (b < 0)` |
-| **3** | **Shunting-Yard Expression Evaluator** | Infix expressions with `()`, `^`, unary `-`, variables (`ans`, `m`, `pi`, `e`) | Lexical scanner `while` loop, Dijkstra's Shunting-Yard `while` operator-stack loop, RPN postfix evaluation loop |
-| **4** | **Combinatorics & Sequences** | Factorial ($n!$), Fibonacci, $nCr$ / $nPr$, Pascal's Triangle | Multiplicative reduction loops, 2D nested `for` loop pyramid builder (`row[c] = prev[c-1] + prev[c]`) |
-| **5** | **Number Theory & Primes** | Prime Check, Prime Range, Sieve of Eratosthenes, Prime Factorization, Perfect/Abundant/Deficient/Harshad Classifier | Early-exit $\sqrt{n}$ loop, Sieve boolean marking nested loop, trial-division `while` loop, proper-divisor aliquot sum loop |
-| **6** | **Euclidean Algorithm** | GCD & LCM Calculator | `while y != 0: x, y = y, x % y` modulo convergence loop |
-| **7** | **Digit Extraction Engine** | Digit Count, Sum, Reverse, Palindrome, Armstrong | `while temp > 0` peeling digits via `temp % 10` and `temp // 10` |
-| **8** | **Boolean Algebra** | Complete Truth Table Generator | Nested `for` loops over `(False, True)` evaluating `AND`, `OR`, `XOR`, `NAND`, `NOR`, `XNOR`, `IMPLIES` |
-| **9** | **Bitwise & Kernighan Popcount** | `&`, `\|`, `^`, `~`, `<<`, `>>`, Set-Bit Counter, Parity & Power-of-2 Check | Brian Kernighan's `while temp > 0: temp &= (temp - 1)` loop clearing lowest set bit in $O(\text{set bits})$ |
-| **10** | **Arbitrary Base Converter** | Any Base $2..36 \leftrightarrow$ Any Base $2..36$ | Horner's method `for` loop (`acc = acc * base + digit`) + repeated division-remainder `while` loop |
-| **11** | **Convergence Loops** | Collatz ($3n+1$) & Newton-Raphson $\sqrt{x}$ | Unbounded `while` loops with parity branching (`n % 2 == 0`) and epsilon tolerance (`abs(diff) < 1e-7`) |
-| **12** | **Calculus & Taylor Series** | Maclaurin Series ($\sin x, \cos x, e^x$) & Trapezoidal Definite Integral | Alternating sign/factorial ratio term loop & Riemann/Trapezoidal $N$-slice summation `for` loop |
-| **13** | **Matrix Algebra** | 2D Add, 3D Matrix Multiply, Transpose, $2\times 2$ & $3\times 3$ Determinant | Double-nested (`r, c`) and triple-nested (`i, j, k`) loops + cofactor expansion loop |
-| **14** | **Algorithms & Statistics** | Bubble/Insertion Sort Visualizer, Binary Search, Descriptive Statistics | Nested sorting pass loops with early-exit flag, `while low <= high` pointer halving, multi-pass mean/variance loops |
-| **15** | **Series & Progressions** | Arithmetic (AP) & Geometric (GP) | Running term & running sum accumulator loops |
-| **M/Q/H** | **Extras** | Memory Registers (`ANS`, `M`, custom variables), Interactive 5-Question Mastery Quiz, JSON History Export | Interactive REPL state management & automated self-testing |
+```mermaid
+flowchart LR
+    UI["React + Vite Frontend\n(Interactive Loop Debugger, Visualizers & Quiz)"]
+    API["Node.js + Express REST API\n(/api/calculate, /api/history, /api/stats, /api/quiz)"]
+    ENG["CALOOPS JS Execution Engine\n(25+ Loop & Logic Algorithms)"]
+    DB[("MongoDB (Mongoose)\n+ Automatic JSON Persistent Store Fallback")]
+    PY["Python CLI Suite\n(calculator.py + unittest)"]
+
+    UI <-->|"REST JSON"| API
+    API --> ENG
+    API <-->|"Mongoose CRUD"| DB
+```
+
+### 1. Frontend (`frontend/` — React 18 + Vite)
+- **9 Interactive Domain Tabs**:
+  1. **Expression & RPN**: Dijkstra's Shunting-Yard Infix-to-Postfix stack loop evaluator with keypad and `ans`/`pi`/`e` variables.
+  2. **Loop Arithmetic**: Multiplication via repeated addition (`for`), Division (`Q, R`) via repeated subtraction (`while`), Exponentiation (`for`), and AP/GP progressions.
+  3. **Primes & Number Theory**: Early-exit $\sqrt{n}$ prime checker, Sieve of Eratosthenes, trial-division Prime Factorization, Perfect/Abundant/Deficient/Harshad classifier, Euclidean GCD/LCM, and Digit Extraction (`% 10`, `// 10`).
+  4. **Combinatorics & Pascal**: $n!$, Fibonacci tuple-swap loop, $nCr$ & $nPr$, and interactive 2D Pascal's Triangle Pyramid visualizer.
+  5. **Logic, Bitwise & Bases**: 7-Gate Boolean Truth Table (`AND`, `OR`, `XOR`, `NAND`, `NOR`, `XNOR`, `IMPLIES`), Bitwise calculator, Brian Kernighan `n &= (n - 1)` 1-bit popcount, and Horner Base `2..36` converter.
+  6. **Calculus & Convergence**: Collatz $3n+1$ hailstone loop, Newton-Raphson $\sqrt{x}$, Maclaurin/Taylor Series ($\sin x, \cos x, e^x$), and Trapezoidal Definite Integration.
+  7. **Matrix 3D Loops**: 2D Matrix Addition, **3D Triple-Nested Loop (`i, j, k`) Matrix Multiplication**, Transpose, and Cofactor Determinant.
+  8. **Sorting, Search & Stats**: Bubble Sort & Insertion Sort pass visualizer, Binary Search (`while low <= high`), and Two-Pass Descriptive Statistics.
+  9. **Mastery Quiz & DB Leaderboard**: 5-question interactive quiz with explanations and persistent database leaderboard.
+- **Step-by-Step Loop Trace Debugger**: Step backward/forward (`◀ Prev`, `Next ▶`), animate iterations (`▶ Animate Loop`), or inspect all iterations with time-complexity badges.
+
+### 2. Backend (`backend/` — Node.js + Express.js)
+- `POST /api/calculate` — Executes any of the 25+ loop/logic algorithms, records execution time in ms, and saves the trace to the database.
+- `GET /api/history` — Lists saved calculations with category and favorite filters.
+- `PATCH /api/history/:id/favorite` — Stars/unstars a calculation in the database.
+- `DELETE /api/history/:id` & `DELETE /api/history` — Deletes single or all history records.
+- `GET /api/stats` — Aggregates total calculations, total loop steps traced, category breakdown, and active database status.
+- `GET /api/quiz` & `POST /api/quiz/submit` — Serves quiz questions, grades submissions, and updates the leaderboard.
+
+### 3. Database (`backend/models/` & `backend/config/db.js` — MongoDB + Hybrid Store)
+- Uses **Mongoose** schemas ([Calculation.js](file:///c:/Users/HP/Desktop/caloops/backend/models/Calculation.js) and [QuizScore.js](file:///c:/Users/HP/Desktop/caloops/backend/models/QuizScore.js)) to connect to `MONGODB_URI` (defaults to `mongodb://127.0.0.1:27017/caloops`).
+- Automatically falls back to a persistent local JSON database (`backend/data/caloops_db.json`) if a local `mongod` service is not running, so the full stack works out of the box with zero configuration.
 
 ---
 
-## Quick Start
+## Getting Started
 
-### 1. Run Interactive Menu Mode
+### Run the Full-Stack MERN Application
 ```bash
-python calculator.py
+# 1. Install backend and frontend dependencies
+npm.cmd --prefix backend install
+npm.cmd --prefix frontend install
+
+# 2. Build the React production bundle (served automatically by Express on port 5000)
+npm.cmd --prefix frontend run build
+
+# 3. Start the MERN server (http://localhost:5000)
+node backend/server.js
 ```
 
-### 2. Run Automated Showcase / Demo Mode
+Or run Frontend Vite Dev Server (`http://localhost:5173`) + Backend API (`http://localhost:5000`) separately:
 ```bash
-python calculator.py --demo
+# Terminal 1: Backend API
+npm.cmd --prefix backend run dev
+
+# Terminal 2: React Vite Dev Server
+npm.cmd --prefix frontend run dev
 ```
 
-### 3. Run Comprehensive Unit Test Suite
+### Run Automated Tests (Backend Node + Python CLI)
 ```bash
+# Node.js Backend Engine Tests
+node --test backend/test/engine.test.js
+
+# Python CLI Unit Tests
 python -m unittest discover -v
 ```

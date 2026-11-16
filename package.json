@@ -1,0 +1,15 @@
+{
+  "name": "caloops-mern-suite",
+  "version": "2.0.0",
+  "private": true,
+  "description": "CALOOPS v2.0 — Full-Stack MERN (MongoDB, Express, React, Node.js) + Python CLI Scientific Logic & Loops Calculator",
+  "scripts": {
+    "install:all": "npm --prefix backend install && npm --prefix frontend install",
+    "build": "npm --prefix frontend run build",
+    "start": "node backend/server.js",
+    "dev:backend": "npm --prefix backend run dev",
+    "dev:frontend": "npm --prefix frontend run dev",
+    "test:backend": "npm --prefix backend test",
+    "test:python": "python -m unittest discover -v"
+  }
+}

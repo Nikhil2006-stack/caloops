@@ -1,0 +1,48 @@
+{
+  "calculations": [
+    {
+      "_id": "fcf1d0a1-8c70-482a-a8bd-300c2b19a58c",
+      "category": "expression",
+      "operation": "expression_rpn",
+      "loopType": "Shunting-Yard While-Stack + RPN Postfix For-Loop",
+      "complexity": "O(N tokens)",
+      "inputs": {
+        "expr": "2 ^ 5 + 8",
+        "variables": {
+          "ans": 0
+        }
+      },
+      "result": 40,
+      "steps": [
+        "[Tokenizer While-Loop] Tokens = [2, ^, 5, +, 8]",
+        "  [Shunting-Yard] Pushed '^' onto opStack [^]",
+        "  [Shunting-Yard] Popped '^' -> RPN queue",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "[RPN Postfix Queue] 2 5 ^ 8 +",
+        "  [RPN Stack Eval] 2 ^ 5 = 32 | stack=[32]",
+        "  [RPN Stack Eval] 32 + 8 = 40 | stack=[40]"
+      ],
+      "executionTimeMs": 0.634,
+      "favorite": false,
+      "createdAt": "2026-11-16T14:50:58.804Z"
+    }
+  ],
+  "quizScores": [
+    {
+      "_id": "seed-1",
+      "username": "AdaLovelace",
+      "score": 5,
+      "total": 5,
+      "percentage": 100,
+      "createdAt": "2026-11-16T14:50:58.681Z"
+    },
+    {
+      "_id": "seed-2",
+      "username": "EdsgerDijkstra",
+      "score": 5,
+      "total": 5,
+      "percentage": 100,
+      "createdAt": "2026-11-16T14:50:58.683Z"
+    }
+  ]
+}

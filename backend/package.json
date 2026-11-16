@@ -1,0 +1,17 @@
+{
+  "name": "caloops-backend",
+  "version": "2.0.0",
+  "description": "MERN Backend API & Loop/Logic Execution Engine for CALOOPS",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js",
+    "test": "node --test test/engine.test.js"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "mongoose": "^8.8.1"
+  }
+}
