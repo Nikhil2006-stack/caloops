@@ -19,7 +19,9 @@ function hashPassword(password) {
 }
 
 function verifyPassword(password, storedHash) {
-  return hashPassword(password) === storedHash;
+  const candidate = Buffer.from(hashPassword(password), "utf-8");
+  const expected = Buffer.from(String(storedHash || ""), "utf-8");
+  return candidate.length === expected.length && crypto.timingSafeEqual(candidate, expected);
 }
 
 function normalizeMobile(mobile) {
@@ -50,7 +52,11 @@ function verifyAuthToken(token) {
     .createHmac("sha256", TOKEN_SECRET)
     .update(dataB64)
     .digest("base64url");
-  if (sig !== expectedSig) return null;
+  const sigBuf = Buffer.from(String(sig || ""), "utf-8");
+  const expBuf = Buffer.from(expectedSig, "utf-8");
+  if (sigBuf.length !== expBuf.length || !crypto.timingSafeEqual(sigBuf, expBuf)) {
+    return null;
+  }
   try {
     const payload = JSON.parse(Buffer.from(dataB64, "base64url").toString("utf-8"));
     if (payload.exp && Date.now() > payload.exp) return null;

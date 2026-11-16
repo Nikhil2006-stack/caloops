@@ -1,6 +1,43 @@
 {
   "calculations": [
     {
+      "_id": "6a1ed730-0846-4e9e-b3af-300bb8843e39",
+      "category": "expression",
+      "operation": "expression_rpn",
+      "loopType": "Shunting-Yard While-Stack + RPN Postfix For-Loop",
+      "complexity": "O(N tokens)",
+      "inputs": {
+        "expr": "3 + 4 * 2 / (1 - 5) ^ 2 + ans",
+        "variables": {
+          "ans": 10
+        }
+      },
+      "result": 13.5,
+      "steps": [
+        "[Tokenizer While-Loop] Tokens = [3, +, 4, *, 2, /, (, 1, -, 5, ), ^, 2, +, 10]",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "  [Shunting-Yard] Pushed '*' onto opStack [+, *]",
+        "  [Shunting-Yard] Popped '*' -> RPN queue",
+        "  [Shunting-Yard] Pushed '/' onto opStack [+, /]",
+        "  [Shunting-Yard] Pushed '-' onto opStack [+, /, (, -]",
+        "  [Shunting-Yard] Pushed '^' onto opStack [+, /, ^]",
+        "  [Shunting-Yard] Popped '^' -> RPN queue",
+        "  [Shunting-Yard] Popped '/' -> RPN queue",
+        "  [Shunting-Yard] Popped '+' -> RPN queue",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "[RPN Postfix Queue] 3 4 2 * 1 5 - 2 ^ / + 10 +",
+        "  [RPN Stack Eval] 4 * 2 = 8 | stack=[3, 8]",
+        "  [RPN Stack Eval] 1 - 5 = -4 | stack=[3, 8, -4]",
+        "  [RPN Stack Eval] -4 ^ 2 = 16 | stack=[3, 8, 16]",
+        "  [RPN Stack Eval] 8 / 16 = 0.5 | stack=[3, 0.5]",
+        "  [RPN Stack Eval] 3 + 0.5 = 3.5 | stack=[3.5]",
+        "  [RPN Stack Eval] 3.5 + 10 = 13.5 | stack=[13.5]"
+      ],
+      "executionTimeMs": 1.861,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:19:07.070Z"
+    },
+    {
       "_id": "4f80aa48-5559-4dd2-ab22-e34f4d125526",
       "category": "loop_math",
       "operation": "progression",
@@ -504,6 +541,46 @@
       "otpCode": null,
       "otpExpiresAt": null,
       "createdAt": "2026-11-16T15:13:33.072Z"
+    },
+    {
+      "_id": "2e96e183-8f60-4e69-96a7-246faa2556f6",
+      "username": "user_6145",
+      "email": "mobile_9980826145@caloops.dev",
+      "mobile": "9980826145",
+      "passwordHash": "b15229014362c6817a1eca4a5878b244f607cff3d8f593165527726a7f6c798a",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:16:06.073Z"
+    },
+    {
+      "_id": "e476cd5e-02d4-48a2-a9e1-74f46e58b26c",
+      "username": "NIKHIL K",
+      "email": "nikhilnikki1704@gmail.com",
+      "mobile": "9980477145",
+      "passwordHash": "a51faf939598219e2d54268d500bf17bcb3280402ddb88ac3f73923e8f368435",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:17:46.116Z"
+    },
+    {
+      "_id": "5a461f10-581b-4747-bf6f-bdb7f07e7a97",
+      "username": "user_6888",
+      "email": "mobile_6813686888@caloops.dev",
+      "mobile": "6813686888",
+      "passwordHash": "1fbf6410706bf723d0429522719512739cdc1ff9c2ce2e2ae5bf013b25b64b18",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:19:37.045Z"
+    },
+    {
+      "_id": "571b6ab0-fe3c-4dcf-939d-972536f2c909",
+      "username": "tester_31505",
+      "email": "tester_31505@caloops.dev",
+      "mobile": "9988731505",
+      "passwordHash": "4adab148ce46eab46f17e15ee5c69107fdb0fd890517add90e666611d6571d95",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:37:11.524Z"
     }
   ]
 }

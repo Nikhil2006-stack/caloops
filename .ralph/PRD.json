@@ -1,0 +1,60 @@
+{
+  "project": "CALOOPS v2.0 Full-Stack MERN & Python Calculator",
+  "created_at": "2026-11-16",
+  "backpressure_commands": [
+    "python -m unittest discover -v",
+    "node --test backend/test/engine.test.js",
+    "npm.cmd --prefix frontend run build"
+  ],
+  "stories": [
+    {
+      "id": "STR-001",
+      "priority": 1,
+      "title": "Python CLI v2.0 Logic & Loops Suite",
+      "description": "Implement 15+ logic and loop calculator modules in calculator.py with step-by-step traces and unit tests in test_calculator.py.",
+      "acceptance_criteria": [
+        "All 10 unittest test cases pass",
+        "Supports --demo flag and interactive REPL"
+      ],
+      "verify_command": "python -m unittest discover -v",
+      "passes": true
+    },
+    {
+      "id": "STR-002",
+      "priority": 2,
+      "title": "MERN Full-Stack Backend, Mongoose Models & Hybrid DB",
+      "description": "Build Express server, Calculation/QuizScore/User Mongoose models, and hybrid JSON persistent fallback.",
+      "acceptance_criteria": [
+        "All engine and auth tests pass in backend/test/engine.test.js",
+        "Works with MongoDB and automatic JSON fallback"
+      ],
+      "verify_command": "node --test backend/test/engine.test.js",
+      "passes": true
+    },
+    {
+      "id": "STR-003",
+      "priority": 3,
+      "title": "Authentication & Mobile OTP Login Page",
+      "description": "Implement AuthPage.jsx with Password Login, 6-Digit Mobile OTP Login with SMS popup, Registration, and Forgot Password.",
+      "acceptance_criteria": [
+        "Mobile OTP flow generates 6-digit OTP and auto-logs in upon verification",
+        "Password login accepts username, email, or mobile number"
+      ],
+      "verify_command": "node --test backend/test/engine.test.js",
+      "passes": true
+    },
+    {
+      "id": "STR-004",
+      "priority": 4,
+      "title": "CodeRabbit Timing-Safe Auth Fix & Ponytail Engine Deduplication",
+      "description": "Use crypto.timingSafeEqual for HMAC/PBKDF2 comparisons in backend/config/db.js and deduplicate caloopsEngine.js across backend and frontend.",
+      "acceptance_criteria": [
+        "verifyPassword and verifyAuthToken use crypto.timingSafeEqual",
+        "frontend/src/apiClient.js imports shared engine logic from backend/engine/caloopsEngine.js without duplicating 500 lines",
+        "Frontend Vite build and backend tests pass"
+      ],
+      "verify_command": "node --test backend/test/engine.test.js && npm.cmd --prefix frontend run build",
+      "passes": true
+    }
+  ]
+}

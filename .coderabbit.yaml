@@ -1,0 +1,31 @@
+# yaml-language-server: $schema=https://coderabbit.ai/integrations/schema.v2.json
+language: "en-US"
+early_access: false
+reviews:
+  profile: "chill"
+  request_changes_workflow: false
+  high_level_summary: true
+  poem: true
+  review_status: true
+  collapse_walkthrough: false
+  sequence_diagrams: true
+  path_filters:
+    - "!**/node_modules/**"
+    - "!**/dist/**"
+    - "!docs/assets/**"
+    - "!**/*.lock"
+    - "!**/package-lock.json"
+  path_instructions:
+    - path: "backend/**"
+      instructions: |
+        Enforce constant-time cryptographic comparisons (crypto.timingSafeEqual) for password hashes and HMAC signatures.
+        Ensure MongoDB Mongoose queries and local JSON fallback methods maintain identical return contracts.
+    - path: "frontend/src/**"
+      instructions: |
+        Prevent duplicate business logic between frontend and backend (Ponytail Rung 2).
+        Verify accessibility and clean error states across AuthPage.jsx and App.jsx.
+    - path: "calculator.py"
+      instructions: |
+        Ensure all loop and logic operations return (result, steps) and guard against ZeroDivisionError and negative domain errors.
+chat:
+  auto_reply: true
