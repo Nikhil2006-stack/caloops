@@ -1,30 +1,421 @@
 {
   "calculations": [
     {
-      "_id": "fcf1d0a1-8c70-482a-a8bd-300c2b19a58c",
+      "_id": "4f80aa48-5559-4dd2-ab22-e34f4d125526",
+      "category": "loop_math",
+      "operation": "progression",
+      "loopType": "Running Term & Sum Accumulator For-Loop",
+      "complexity": "O(n)",
+      "inputs": {
+        "firstTerm": 2,
+        "diffOrRatio": 3,
+        "count": 10,
+        "kind": "AP"
+      },
+      "result": {
+        "terms": [
+          2,
+          5,
+          8,
+          11,
+          14,
+          17,
+          20,
+          23,
+          26,
+          29
+        ],
+        "sum": 155,
+        "kind": "AP"
+      },
+      "steps": [
+        "[AP For-Loop] first=2, d=3, n=10",
+        "  [Term 1] value = 2.0000 | running_sum = 2.0000",
+        "  [Term 2] value = 5.0000 | running_sum = 7.0000",
+        "  [Term 3] value = 8.0000 | running_sum = 15.0000",
+        "  [Term 4] value = 11.0000 | running_sum = 26.0000",
+        "  [Term 5] value = 14.0000 | running_sum = 40.0000",
+        "  [Term 6] value = 17.0000 | running_sum = 57.0000",
+        "  [Term 7] value = 20.0000 | running_sum = 77.0000",
+        "  [Term 8] value = 23.0000 | running_sum = 100.0000",
+        "  [Term 9] value = 26.0000 | running_sum = 126.0000",
+        "  [Term 10] value = 29.0000 | running_sum = 155.0000"
+      ],
+      "executionTimeMs": 0.337,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:02:49.458Z"
+    },
+    {
+      "_id": "b479d433-a932-48ef-b156-a859213ac010",
+      "category": "loop_math",
+      "operation": "power_loop",
+      "loopType": "For-Loop Multiplicative Accumulator",
+      "complexity": "O(|exp|)",
+      "inputs": {
+        "base": 2,
+        "exp": 8
+      },
+      "result": 256,
+      "steps": [
+        "  [for iter 1/8] acc = 1 * 2 -> 2",
+        "  [for iter 2/8] acc = 2 * 2 -> 4",
+        "  [for iter 3/8] acc = 4 * 2 -> 8",
+        "  [for iter 4/8] acc = 8 * 2 -> 16",
+        "  [for iter 5/8] acc = 16 * 2 -> 32",
+        "  [for iter 6/8] acc = 32 * 2 -> 64",
+        "  [for iter 7/8] acc = 64 * 2 -> 128",
+        "  [for iter 8/8] acc = 128 * 2 -> 256"
+      ],
+      "executionTimeMs": 0.21,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:02:45.295Z"
+    },
+    {
+      "_id": "7a350667-0b45-4fd9-8902-7dd401bc48bc",
+      "category": "loop_math",
+      "operation": "divide_loop",
+      "loopType": "While-Loop Repeated Subtraction (rem >= divisor)",
+      "complexity": "O(a / b)",
+      "inputs": {
+        "a": 29,
+        "b": 5
+      },
+      "result": {
+        "quotient": 5,
+        "remainder": 4
+      },
+      "steps": [
+        "[Init] quotient = 0, remainder = 29, divisor = 5",
+        "  [while rem >= 5] 29 - 5 = 24 | quotient -> 1",
+        "  [while rem >= 5] 24 - 5 = 19 | quotient -> 2",
+        "  [while rem >= 5] 19 - 5 = 14 | quotient -> 3",
+        "  [while rem >= 5] 14 - 5 = 9 | quotient -> 4",
+        "  [while rem >= 5] 9 - 5 = 4 | quotient -> 5",
+        "[Loop Exit] remainder (4) < divisor (5). Final: Q=5, R=4"
+      ],
+      "executionTimeMs": 0.229,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:02:42.554Z"
+    },
+    {
+      "_id": "33321b2a-acd5-4fe6-ae4d-b3809b77ae27",
+      "category": "matrix",
+      "operation": "matrix",
+      "loopType": "3D Triple-Nested For-Loop (i, j, k)",
+      "complexity": "O(R1 × C1 × C2)",
+      "inputs": {
+        "matrixA": "1 2; 3 4",
+        "matrixB": "5 6; 7 8",
+        "mode": "multiply"
+      },
+      "result": [
+        [
+          19,
+          22
+        ],
+        [
+          43,
+          50
+        ]
+      ],
+      "steps": [
+        "[3D Triple-Nested Loop] Multiplying (2x2) × (2x2)",
+        "  [i=0, j=0, k=0] A[0][0](1) * B[0][0](5) = 5 | sum=5",
+        "  [i=0, j=0, k=1] A[0][1](2) * B[1][0](7) = 14 | sum=19",
+        "  [i=0, j=1, k=0] A[0][0](1) * B[0][1](6) = 6 | sum=6",
+        "  [i=0, j=1, k=1] A[0][1](2) * B[1][1](8) = 16 | sum=22",
+        "  [i=1, j=0, k=0] A[1][0](3) * B[0][0](5) = 15 | sum=15",
+        "  [i=1, j=0, k=1] A[1][1](4) * B[1][0](7) = 28 | sum=43",
+        "  [i=1, j=1, k=0] A[1][0](3) * B[0][1](6) = 18 | sum=18",
+        "  [i=1, j=1, k=1] A[1][1](4) * B[1][1](8) = 32 | sum=50"
+      ],
+      "executionTimeMs": 0.827,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:41.645Z"
+    },
+    {
+      "_id": "4fedf903-166a-4064-a719-d2ad398f1a9d",
+      "category": "calculus",
+      "operation": "collatz",
+      "loopType": "Unbounded Convergence While-Loop (while n != 1)",
+      "complexity": "Unproven (Collatz Conjecture)",
+      "inputs": {
+        "n": "2"
+      },
+      "result": {
+        "sequence": [
+          2,
+          1
+        ],
+        "stepsCount": 1,
+        "peak": 2
+      },
+      "steps": [
+        "[Collatz Init] Start at n = 2",
+        "  [Step 1: EVEN] 2 / 2 = 1",
+        "[Converged] Reached 1 in 1 steps. Peak = 2."
+      ],
+      "executionTimeMs": 0.2,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:38.769Z"
+    },
+    {
+      "_id": "6bb3a425-f771-4c81-9d8e-236ac1fd0b11",
+      "category": "bitwise",
+      "operation": "bitwise",
+      "loopType": "Bit-Level Hardware Register Logic",
+      "complexity": "O(1)",
+      "inputs": {
+        "a": 29,
+        "b": 5,
+        "op": "<<"
+      },
+      "result": {
+        "decimal": 928,
+        "binary": "1110100000"
+      },
+      "steps": [
+        "Binary A (29) = 11101",
+        "Binary B (5) = 101",
+        "[Bitwise <<] Result = 928 (Binary: 1110100000)"
+      ],
+      "executionTimeMs": 0.03,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:26.793Z"
+    },
+    {
+      "_id": "1721da1e-33d8-481c-bb46-9d6c3f3b1a10",
+      "category": "bitwise",
+      "operation": "truth_table",
+      "loopType": "2D Nested Boolean Product Loop",
+      "complexity": "O(2^vars)",
+      "inputs": {},
+      "result": [
+        {
+          "A": 0,
+          "B": 0,
+          "AND": 0,
+          "OR": 0,
+          "XOR": 0,
+          "NAND": 1,
+          "NOR": 1,
+          "XNOR": 1,
+          "IMPLIES": 1
+        },
+        {
+          "A": 0,
+          "B": 1,
+          "AND": 0,
+          "OR": 1,
+          "XOR": 1,
+          "NAND": 1,
+          "NOR": 0,
+          "XNOR": 0,
+          "IMPLIES": 1
+        },
+        {
+          "A": 1,
+          "B": 0,
+          "AND": 0,
+          "OR": 1,
+          "XOR": 1,
+          "NAND": 1,
+          "NOR": 0,
+          "XNOR": 0,
+          "IMPLIES": 0
+        },
+        {
+          "A": 1,
+          "B": 1,
+          "AND": 1,
+          "OR": 1,
+          "XOR": 0,
+          "NAND": 0,
+          "NOR": 0,
+          "XNOR": 1,
+          "IMPLIES": 1
+        }
+      ],
+      "steps": [
+        "[Nested For-Loop] Iterating A in (false, true), B in (false, true)",
+        "  [Row A=0, B=0] -> {\"A\":0,\"B\":0,\"AND\":0,\"OR\":0,\"XOR\":0,\"NAND\":1,\"NOR\":1,\"XNOR\":1,\"IMPLIES\":1}",
+        "  [Row A=0, B=1] -> {\"A\":0,\"B\":1,\"AND\":0,\"OR\":1,\"XOR\":1,\"NAND\":1,\"NOR\":0,\"XNOR\":0,\"IMPLIES\":1}",
+        "  [Row A=1, B=0] -> {\"A\":1,\"B\":0,\"AND\":0,\"OR\":1,\"XOR\":1,\"NAND\":1,\"NOR\":0,\"XNOR\":0,\"IMPLIES\":0}",
+        "  [Row A=1, B=1] -> {\"A\":1,\"B\":1,\"AND\":1,\"OR\":1,\"XOR\":0,\"NAND\":0,\"NOR\":0,\"XNOR\":1,\"IMPLIES\":1}"
+      ],
+      "executionTimeMs": 0.309,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:13.923Z"
+    },
+    {
+      "_id": "dc77cc91-1808-4d5d-a222-b509bfa2e4a5",
+      "category": "primes",
+      "operation": "is_prime",
+      "loopType": "Early-Exit √n For-Loop",
+      "complexity": "O(1)",
+      "inputs": {
+        "n": "2"
+      },
+      "result": true,
+      "steps": [
+        "[Logic Check] n=2 is the only even prime -> Prime."
+      ],
+      "executionTimeMs": 0.012,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:07.401Z"
+    },
+    {
+      "_id": "16f1e094-1713-4802-ad0b-d505ecf1a4ed",
+      "category": "primes",
+      "operation": "is_prime",
+      "loopType": "Early-Exit √n For-Loop",
+      "complexity": "O(1)",
+      "inputs": {
+        "n": "1"
+      },
+      "result": false,
+      "steps": [
+        "[Logic Check] n=1 <= 1 -> Not prime."
+      ],
+      "executionTimeMs": 0.014,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:01:04.867Z"
+    },
+    {
+      "_id": "4f568082-5f01-4a19-a518-f91c76ad2da8",
+      "category": "primes",
+      "operation": "is_prime",
+      "loopType": "Early-Exit √n For-Loop",
+      "complexity": "O(√n)",
+      "inputs": {
+        "n": 153
+      },
+      "result": false,
+      "steps": [
+        "[Loop Setup] Testing odd divisors d from 3 to floor(sqrt(153)) = 12 (step 2)",
+        "  [for d=3] 153 % 3 == 0 -> Divisor found! Early break -> Not prime."
+      ],
+      "executionTimeMs": 0.223,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:00:59.583Z"
+    },
+    {
+      "_id": "7e0428de-a450-462e-b200-6a97a3b06a5a",
+      "category": "loop_math",
+      "operation": "multiply_loop",
+      "loopType": "For-Loop Repeated Addition + XOR Sign Logic",
+      "complexity": "O(|b|)",
+      "inputs": {
+        "a": 29,
+        "b": 5
+      },
+      "result": 145,
+      "steps": [
+        "[Sign Logic] (a < 0) XOR (b < 0) => (false) ^ (false) = false",
+        "  [for iter 1/5] accumulator = 0 + 29 -> 29",
+        "  [for iter 2/5] accumulator = 29 + 29 -> 58",
+        "  [for iter 3/5] accumulator = 58 + 29 -> 87",
+        "  [for iter 4/5] accumulator = 87 + 29 -> 116",
+        "  [for iter 5/5] accumulator = 116 + 29 -> 145",
+        "[Result] Applied sign logic -> 145"
+      ],
+      "executionTimeMs": 0.223,
+      "favorite": false,
+      "createdAt": "2026-11-16T15:00:52.062Z"
+    },
+    {
+      "_id": "27244453-3929-4a23-95ec-11e65f8c52b5",
       "category": "expression",
       "operation": "expression_rpn",
       "loopType": "Shunting-Yard While-Stack + RPN Postfix For-Loop",
       "complexity": "O(N tokens)",
       "inputs": {
-        "expr": "2 ^ 5 + 8",
+        "expr": "3 + 4 * 2 / (1 - 5) ^ 2 + ans",
         "variables": {
-          "ans": 0
+          "ans": 10
         }
       },
-      "result": 40,
+      "result": 13.5,
       "steps": [
-        "[Tokenizer While-Loop] Tokens = [2, ^, 5, +, 8]",
-        "  [Shunting-Yard] Pushed '^' onto opStack [^]",
-        "  [Shunting-Yard] Popped '^' -> RPN queue",
+        "[Tokenizer While-Loop] Tokens = [3, +, 4, *, 2, /, (, 1, -, 5, ), ^, 2, +, 10]",
         "  [Shunting-Yard] Pushed '+' onto opStack [+]",
-        "[RPN Postfix Queue] 2 5 ^ 8 +",
-        "  [RPN Stack Eval] 2 ^ 5 = 32 | stack=[32]",
-        "  [RPN Stack Eval] 32 + 8 = 40 | stack=[40]"
+        "  [Shunting-Yard] Pushed '*' onto opStack [+, *]",
+        "  [Shunting-Yard] Popped '*' -> RPN queue",
+        "  [Shunting-Yard] Pushed '/' onto opStack [+, /]",
+        "  [Shunting-Yard] Pushed '-' onto opStack [+, /, (, -]",
+        "  [Shunting-Yard] Pushed '^' onto opStack [+, /, ^]",
+        "  [Shunting-Yard] Popped '^' -> RPN queue",
+        "  [Shunting-Yard] Popped '/' -> RPN queue",
+        "  [Shunting-Yard] Popped '+' -> RPN queue",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "[RPN Postfix Queue] 3 4 2 * 1 5 - 2 ^ / + 10 +",
+        "  [RPN Stack Eval] 4 * 2 = 8 | stack=[3, 8]",
+        "  [RPN Stack Eval] 1 - 5 = -4 | stack=[3, 8, -4]",
+        "  [RPN Stack Eval] -4 ^ 2 = 16 | stack=[3, 8, 16]",
+        "  [RPN Stack Eval] 8 / 16 = 0.5 | stack=[3, 0.5]",
+        "  [RPN Stack Eval] 3 + 0.5 = 3.5 | stack=[3.5]",
+        "  [RPN Stack Eval] 3.5 + 10 = 13.5 | stack=[13.5]"
       ],
-      "executionTimeMs": 0.634,
+      "executionTimeMs": 1.014,
       "favorite": false,
-      "createdAt": "2026-11-16T14:50:58.804Z"
+      "createdAt": "2026-11-16T15:00:47.911Z"
+    },
+    {
+      "_id": "c6016088-0294-47b2-b323-98518bf2e415",
+      "category": "expression",
+      "operation": "expression_rpn",
+      "loopType": "Shunting-Yard While-Stack + RPN Postfix For-Loop",
+      "complexity": "O(N tokens)",
+      "inputs": {
+        "expr": "3 + 4 * 2 / (1 - 5) ^ 2 + ans ",
+        "variables": {
+          "ans": 17
+        }
+      },
+      "result": 20.5,
+      "steps": [
+        "[Tokenizer While-Loop] Tokens = [3, +, 4, *, 2, /, (, 1, -, 5, ), ^, 2, +, 17]",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "  [Shunting-Yard] Pushed '*' onto opStack [+, *]",
+        "  [Shunting-Yard] Popped '*' -> RPN queue",
+        "  [Shunting-Yard] Pushed '/' onto opStack [+, /]",
+        "  [Shunting-Yard] Pushed '-' onto opStack [+, /, (, -]",
+        "  [Shunting-Yard] Pushed '^' onto opStack [+, /, ^]",
+        "  [Shunting-Yard] Popped '^' -> RPN queue",
+        "  [Shunting-Yard] Popped '/' -> RPN queue",
+        "  [Shunting-Yard] Popped '+' -> RPN queue",
+        "  [Shunting-Yard] Pushed '+' onto opStack [+]",
+        "[RPN Postfix Queue] 3 4 2 * 1 5 - 2 ^ / + 17 +",
+        "  [RPN Stack Eval] 4 * 2 = 8 | stack=[3, 8]",
+        "  [RPN Stack Eval] 1 - 5 = -4 | stack=[3, 8, -4]",
+        "  [RPN Stack Eval] -4 ^ 2 = 16 | stack=[3, 8, 16]",
+        "  [RPN Stack Eval] 8 / 16 = 0.5 | stack=[3, 0.5]",
+        "  [RPN Stack Eval] 3 + 0.5 = 3.5 | stack=[3.5]",
+        "  [RPN Stack Eval] 3.5 + 17 = 20.5 | stack=[20.5]"
+      ],
+      "executionTimeMs": 0.15,
+      "favorite": false,
+      "createdAt": "2026-11-16T14:57:41.891Z"
+    },
+    {
+      "_id": "58b21df5-c9eb-482a-9fee-62171b7e28a0",
+      "category": "expression",
+      "operation": "basic_arithmetic",
+      "loopType": "Conditional Branching (if / else if / else)",
+      "complexity": "O(1)",
+      "inputs": {
+        "a": "12",
+        "b": 5,
+        "op": "+"
+      },
+      "result": 17,
+      "steps": [
+        "[Logic Check] Evaluating operator '+' on a=12, b=5",
+        "Branch '+' matched -> 12 + 5 = 17"
+      ],
+      "executionTimeMs": 0.007,
+      "favorite": false,
+      "createdAt": "2026-11-16T14:57:22.671Z"
     }
   ],
   "quizScores": [
@@ -43,6 +434,76 @@
       "total": 5,
       "percentage": 100,
       "createdAt": "2026-11-16T14:50:58.683Z"
+    },
+    {
+      "_id": "b01997c5-c8a8-4f38-91f0-5016a388f473",
+      "username": "Nikhil",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:01:59.716Z"
+    },
+    {
+      "_id": "8a7b4b5d-7c2c-481b-b527-6e70ddca2ee4",
+      "username": "Nikhil",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:02:12.654Z"
+    },
+    {
+      "_id": "f6c7a74a-a8f6-4b9a-b6cc-cdee6ee572ed",
+      "username": "Nikhil",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:02:13.204Z"
+    },
+    {
+      "_id": "20e91fa7-de61-410e-b385-472fe2fc521f",
+      "username": "Nikhil",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:02:13.442Z"
+    },
+    {
+      "_id": "58d1edae-77c3-4530-b06c-c20c42eaf5a4",
+      "username": "Nikhil",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:02:13.618Z"
+    },
+    {
+      "_id": "631abc44-cb14-4860-b401-4e2f2dde0308",
+      "username": "abc",
+      "score": 2,
+      "total": 5,
+      "percentage": 40,
+      "createdAt": "2026-11-16T15:02:20.637Z"
+    }
+  ],
+  "users": [
+    {
+      "_id": "user-demo-1",
+      "username": "Nikhil",
+      "email": "nikhil@caloops.dev",
+      "mobile": "9876543210",
+      "passwordHash": "a988f622b802933fb22d6bd99edb0874ffded6eb6402421c4db68b881658dea2",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:13:33.071Z"
+    },
+    {
+      "_id": "7557282b-ed84-4fe1-8604-5531ae2851e7",
+      "username": "tester_12971",
+      "email": "tester_12971@caloops.dev",
+      "mobile": "9988712971",
+      "passwordHash": "4adab148ce46eab46f17e15ee5c69107fdb0fd890517add90e666611d6571d95",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T15:13:33.072Z"
     }
   ]
 }

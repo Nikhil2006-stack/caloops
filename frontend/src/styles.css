@@ -406,3 +406,180 @@ body {
   margin-bottom: 0.9rem;
   font-size: 0.86rem;
 }
+
+
+/* ============================================================================
+   AUTHENTICATION PORTAL & MOBILE OTP SMS TOAST STYLES
+   ============================================================================ */
+
+.auth-wrapper {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  background: radial-gradient(circle at top, #1e1b4b 0%, #0b0f19 70%);
+}
+
+.auth-card {
+  width: 100%;
+  max-width: 480px;
+  background: var(--bg-panel);
+  border: 1px solid var(--border);
+  border-radius: 16px;
+  padding: 1.85rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.55);
+}
+
+.auth-brand {
+  text-align: center;
+  margin-bottom: 1.35rem;
+}
+
+.auth-tabs {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.45rem;
+  margin-bottom: 1.25rem;
+}
+
+.auth-tab {
+  padding: 0.58rem 0.65rem;
+  background: var(--bg-card);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+  border-radius: 9px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.auth-tab:hover {
+  border-color: var(--accent);
+  color: var(--text-main);
+}
+
+.auth-tab.active {
+  background: linear-gradient(135deg, #2563eb, #4f46e5);
+  color: #fff;
+  border-color: transparent;
+}
+
+.auth-links-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.link-btn {
+  background: none;
+  border: none;
+  color: var(--accent);
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.link-btn:hover {
+  color: #7dd3fc;
+}
+
+.info-banner {
+  background: rgba(16, 185, 129, 0.14);
+  border: 1px solid var(--accent-emerald);
+  color: #a7f3d0;
+  padding: 0.75rem;
+  border-radius: 8px;
+  margin-bottom: 0.9rem;
+  font-size: 0.84rem;
+}
+
+.otp-box-row {
+  display: grid;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 0.5rem;
+  margin-top: 0.45rem;
+}
+
+.otp-digit-input {
+  width: 100%;
+  height: 50px;
+  text-align: center;
+  font-size: 1.35rem;
+  font-weight: 800;
+  font-family: "JetBrains Mono", Consolas, monospace;
+  background: var(--bg-input);
+  border: 2px solid var(--border);
+  border-radius: 10px;
+  color: var(--accent-emerald);
+}
+
+.otp-digit-input:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(56, 189, 248, 0.2);
+}
+
+.demo-credentials-box {
+  margin-top: 1.1rem;
+  padding: 0.65rem;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px dashed var(--border);
+  border-radius: 8px;
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  text-align: center;
+}
+
+.demo-credentials-box code {
+  color: var(--accent);
+  font-weight: 700;
+}
+
+.sms-toast {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(135deg, #064e3b, #0f172a);
+  border: 1px solid var(--accent-emerald);
+  border-radius: 14px;
+  padding: 1rem 1.15rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 12px 32px rgba(16, 185, 129, 0.25);
+}
+
+.sms-toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #6ee7b7;
+  margin-bottom: 0.35rem;
+}
+
+.sms-close-btn {
+  background: none;
+  border: none;
+  color: #94a3b8;
+  cursor: pointer;
+  font-size: 0.9rem;
+}
+
+.sms-toast-body {
+  font-size: 0.85rem;
+  color: #ecfdf5;
+  margin-bottom: 0.65rem;
+  font-family: "JetBrains Mono", Consolas, monospace;
+}
+
+.sms-toast-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}

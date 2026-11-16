@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import AuthPage from "./AuthPage.jsx";
 
 const CATEGORIES = [
   {
@@ -110,6 +111,9 @@ const DEFAULT_INPUTS = {
 };
 
 export default function App() {
+  const [user, setUser] = useState(null);
+  const [authChecking, setAuthChecking] = useState(true);
+
   const [activeCat, setActiveCat] = useState("expression");
   const [activeOp, setActiveOp] = useState("expression_rpn");
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
@@ -132,6 +136,41 @@ export default function App() {
   const [quizUsername, setQuizUsername] = useState("Nikhil");
   const [quizAnswers, setQuizAnswers] = useState({});
   const [quizResult, setQuizResult] = useState(null);
+
+  useEffect(() => {
+    const token = localStorage.getItem("caloops_token");
+    if (!token) {
+      setAuthChecking(false);
+      return;
+    }
+    fetch("/api/auth/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .then((data) => {
+        if (data?.user) {
+          setUser(data.user);
+          setQuizUsername(data.user.username);
+        }
+      })
+      .catch(() => {
+        localStorage.removeItem("caloops_token");
+      })
+      .finally(() => setAuthChecking(false));
+  }, []);
+
+  const handleAuthSuccess = (loggedInUser, token) => {
+    localStorage.setItem("caloops_token", token);
+    setUser(loggedInUser);
+    if (loggedInUser?.username) {
+      setQuizUsername(loggedInUser.username);
+    }
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("caloops_token");
+    setUser(null);
+  };
 
   const fetchHistoryAndStats = async () => {
     try {
@@ -846,6 +885,18 @@ export default function App() {
 
   const activeCategoryObj = CATEGORIES.find((c) => c.id === activeCat);
 
+  if (authChecking) {
+    return (
+      <div className="auth-wrapper">
+        <div className="pill">Loading CALOOPS Session...</div>
+      </div>
+    );
+  }
+
+  if (!user) {
+    return <AuthPage onAuthSuccess={handleAuthSuccess} />;
+  }
+
   return (
     <div className="app-shell">
       {/* Header */}
@@ -857,6 +908,9 @@ export default function App() {
           </div>
         </div>
         <div className="status-pills">
+          <span className="pill">
+            👤 {user.username} ({user.mobile})
+          </span>
           <span className="pill emerald">
             DB: {stats?.dbStatus?.dbMode || "Connected"}
           </span>
@@ -866,6 +920,9 @@ export default function App() {
           <span className="pill amber">
             Loop Steps Traced: {stats?.totalStepsTraced ?? 0}
           </span>
+          <button type="button" className="small-btn" onClick={handleLogout}>
+            Logout
+          </button>
         </div>
       </header>
 

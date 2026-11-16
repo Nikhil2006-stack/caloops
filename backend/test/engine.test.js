@@ -66,3 +66,66 @@ test("Sorting, Binary Search & Statistical Loops", () => {
   });
   assert.equal(binRes.result.foundIndex, 3);
 });
+
+
+const {
+  connectDB,
+  registerUser,
+  loginWithPassword,
+  createAndSaveOtpForMobile,
+  verifyMobileOtpAndLogin,
+  createPasswordResetOtp,
+  resetPasswordWithOtp,
+} = require("../config/db");
+
+test("Authentication: Register, Password Login, Mobile OTP Login, and Forgot Password", async () => {
+  await connectDB();
+  const uniqueSuffix = Date.now().toString().slice(-5);
+  const mobile = "99887" + uniqueSuffix;
+  const username = `tester_${uniqueSuffix}`;
+  const email = `tester_${uniqueSuffix}@caloops.dev`;
+
+  // 1. Register
+  const reg = await registerUser({
+    username,
+    email,
+    mobile,
+    password: "secretPassword123",
+  });
+  assert.equal(reg.user.username, username);
+  assert.equal(reg.user.mobile, mobile);
+  assert.ok(reg.token);
+
+  // 2. Login via Username, Email, and Mobile Number
+  const loginByUser = await loginWithPassword({
+    identifier: username,
+    password: "secretPassword123",
+  });
+  assert.equal(loginByUser.user.email, email);
+
+  const loginByMobile = await loginWithPassword({
+    identifier: mobile,
+    password: "secretPassword123",
+  });
+  assert.equal(loginByMobile.user.username, username);
+
+  // 3. Mobile OTP Send & Verify Login
+  const otpInfo = await createAndSaveOtpForMobile(mobile);
+  assert.equal(otpInfo.otpCode.length, 6);
+  const otpLogin = await verifyMobileOtpAndLogin({
+    mobile,
+    otp: otpInfo.otpCode,
+  });
+  assert.equal(otpLogin.user.username, username);
+  assert.ok(otpLogin.token);
+
+  // 4. Forgot Password OTP & Reset Password
+  const resetInfo = await createPasswordResetOtp(email);
+  assert.equal(resetInfo.otpCode.length, 6);
+  const afterReset = await resetPasswordWithOtp({
+    identifier: email,
+    otp: resetInfo.otpCode,
+    newPassword: "newPass456",
+  });
+  assert.equal(afterReset.user.username, username);
+});
