@@ -1,8 +1,14 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import AuthPage from "./AuthPage.jsx";
+import MobileCalcView from "./MobileCalcView.jsx";
 import { apiRequest } from "./apiClient.js";
 
 const CATEGORIES = [
+  {
+    id: "daily_app",
+    label: "📱 Daily Calc",
+    ops: [{ id: "pocket_calc", name: "Daily Mobile Calculator" }],
+  },
   {
     id: "expression",
     label: "1. Expression & RPN",
@@ -115,8 +121,32 @@ export default function App() {
   const [user, setUser] = useState(null);
   const [authChecking, setAuthChecking] = useState(true);
 
-  const [activeCat, setActiveCat] = useState("expression");
-  const [activeOp, setActiveOp] = useState("expression_rpn");
+  const [activeCat, setActiveCat] = useState("daily_app");
+  const [activeOp, setActiveOp] = useState("pocket_calc");
+  const [phoneFrameMode, setPhoneFrameMode] = useState(false);
+  const [deferredInstallPrompt, setDeferredInstallPrompt] = useState(null);
+  const [showInstallModal, setShowInstallModal] = useState(false);
+  const traceSectionRef = useRef(null);
+  const historySectionRef = useRef(null);
+
+  useEffect(() => {
+    const handler = (e) => {
+      e.preventDefault();
+      setDeferredInstallPrompt(e);
+    };
+    window.addEventListener("beforeinstallprompt", handler);
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  const handleInstallAppClick = async () => {
+    if (deferredInstallPrompt) {
+      deferredInstallPrompt.prompt();
+      await deferredInstallPrompt.userChoice;
+      setDeferredInstallPrompt(null);
+    } else {
+      setShowInstallModal(true);
+    }
+  };
   const [inputs, setInputs] = useState(DEFAULT_INPUTS);
   const [ansMemory, setAnsMemory] = useState(10);
   const [currentResult, setCurrentResult] = useState(null);
@@ -893,27 +923,80 @@ export default function App() {
   }
 
   return (
-    <div className="app-shell">
+    <div className={`app-shell ${phoneFrameMode ? "phone-frame-mode" : ""}`}>
+      {/* Install App Instructions Modal for iOS / Android */}
+      {showInstallModal && (
+        <div className="install-modal-backdrop" onClick={() => setShowInstallModal(false)}>
+          <div className="install-modal-card" onClick={(e) => e.stopPropagation()}>
+            <div className="panel-header">
+              <span className="panel-title">📲 Install CALOOPS Mobile App</span>
+              <button
+                type="button"
+                className="small-btn"
+                onClick={() => setShowInstallModal(false)}
+              >
+                ✕
+              </button>
+            </div>
+            <p style={{ fontSize: "0.86rem", color: "var(--text-muted)", marginBottom: "0.85rem" }}>
+              CALOOPS is a full Progressive Web App (PWA) with offline Service Worker support. Add it to your phone Home Screen to use it daily like Calculator or Instagram:
+            </p>
+            <div className="result-box" style={{ fontSize: "0.84rem", marginBottom: "0.75rem" }}>
+              <strong>🤖 Android (Chrome / Edge / Samsung):</strong>
+              <p style={{ marginTop: "0.25rem", color: "#cbd5e1" }}>
+                Tap the browser menu <strong>(⋮)</strong> at the top-right and tap <strong>"Install App"</strong> or <strong>"Add to Home screen"</strong>.
+              </p>
+            </div>
+            <div className="result-box" style={{ fontSize: "0.84rem", marginBottom: "1rem" }}>
+              <strong>🍏 iPhone / iOS (Safari):</strong>
+              <p style={{ marginTop: "0.25rem", color: "#cbd5e1" }}>
+                Tap the <strong>Share</strong> button at the bottom of Safari and tap <strong>"Add to Home Screen"</strong>.
+              </p>
+            </div>
+            <button
+              type="button"
+              className="run-btn"
+              onClick={() => setShowInstallModal(false)}
+            >
+              Got It!
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Header */}
       <header className="topbar">
         <div>
-          <div className="brand-title">CALOOPS v2.0 — MERN Logic & Loops Lab</div>
+          <div className="brand-title">CALOOPS — Mobile Calculator & Loop Lab</div>
           <div className="brand-sub">
-            MongoDB + Express + React + Node.js Scientific Calculator & Step-by-Step Loop Debugger
+            Daily Pocket Calculator • Step-by-Step Loop Debugger • Offline-Ready Mobile App
           </div>
         </div>
         <div className="status-pills">
+          <button
+            type="button"
+            className="small-btn"
+            style={{
+              background: "linear-gradient(135deg, #10b981, #059669)",
+              borderColor: "transparent",
+              fontWeight: 700,
+            }}
+            onClick={handleInstallAppClick}
+          >
+            📲 Install Mobile App
+          </button>
+          <button
+            type="button"
+            className="small-btn"
+            onClick={() => setPhoneFrameMode((m) => !m)}
+          >
+            {phoneFrameMode ? "🖥️ Full Screen" : "📱 Phone App View"}
+          </button>
           <span className="pill">
             👤 {user.username} ({user.mobile})
           </span>
           <span className="pill emerald">
-            DB: {stats?.dbStatus?.dbMode || "Connected"}
-          </span>
-          <span className="pill">
-            Calculations Logged: {stats?.totalCalculations ?? history.length}
-          </span>
-          <span className="pill amber">
-            Loop Steps Traced: {stats?.totalStepsTraced ?? 0}
+            {stats?.dbStatus?.dbMode || "Connected"}
           </span>
           <button type="button" className="small-btn" onClick={handleLogout}>
             Logout
@@ -1034,38 +1117,57 @@ export default function App() {
         </div>
       ) : (
         <div className="main-grid">
-          {/* Left Column: Calculator Controls */}
+          {/* Left Column: Daily Mobile Calculator OR Loop Lab Controls */}
           <section className="panel">
-            <div className="panel-header">
-              <span className="panel-title">{activeCategoryObj?.label}</span>
-              <span className="pill">ANS = {ansMemory}</span>
-            </div>
+            {activeCat === "daily_app" ? (
+              <MobileCalcView
+                ansMemory={ansMemory}
+                onResultComputed={(data) => {
+                  setCurrentResult(data);
+                  setActiveStepIdx(data.steps?.length ? data.steps.length - 1 : -1);
+                  if (typeof data.result === "number") {
+                    setAnsMemory(data.result);
+                  }
+                  fetchHistoryAndStats();
+                }}
+                onOpenTrace={() => {
+                  traceSectionRef.current?.scrollIntoView({ behavior: "smooth" });
+                }}
+              />
+            ) : (
+              <>
+                <div className="panel-header">
+                  <span className="panel-title">{activeCategoryObj?.label}</span>
+                  <span className="pill">ANS = {ansMemory}</span>
+                </div>
 
-            <div className="op-selector">
-              {activeCategoryObj?.ops.map((op) => (
-                <button
-                  key={op.id}
-                  type="button"
-                  className={`op-chip ${activeOp === op.id ? "selected" : ""}`}
-                  onClick={() => setActiveOp(op.id)}
-                >
-                  {op.name}
-                </button>
-              ))}
-            </div>
+                <div className="op-selector">
+                  {activeCategoryObj?.ops.map((op) => (
+                    <button
+                      key={op.id}
+                      type="button"
+                      className={`op-chip ${activeOp === op.id ? "selected" : ""}`}
+                      onClick={() => setActiveOp(op.id)}
+                    >
+                      {op.name}
+                    </button>
+                  ))}
+                </div>
 
-            {error && <div className="error-banner">{error}</div>}
+                {error && <div className="error-banner">{error}</div>}
 
-            <form onSubmit={runCalculation}>
-              {renderDynamicInputs()}
-              <button type="submit" className="run-btn" disabled={loading}>
-                {loading ? "Executing Loop..." : "▶ Execute & Trace Loop"}
-              </button>
-            </form>
+                <form onSubmit={runCalculation}>
+                  {renderDynamicInputs()}
+                  <button type="submit" className="run-btn" disabled={loading}>
+                    {loading ? "Executing Loop..." : "▶ Execute & Trace Loop"}
+                  </button>
+                </form>
+              </>
+            )}
           </section>
 
           {/* Center Column: Result & Live Loop/Logic Debugger */}
-          <section className="panel">
+          <section className="panel" ref={traceSectionRef}>
             <div className="panel-header">
               <span className="panel-title">Execution Output & Step-by-Step Loop Trace</span>
               {currentResult && (
@@ -1161,7 +1263,7 @@ export default function App() {
           </section>
 
           {/* Right Column: Persistent Database History */}
-          <section className="panel">
+          <section className="panel" ref={historySectionRef}>
             <div className="panel-header">
               <span className="panel-title">Database History</span>
               <div style={{ display: "flex", gap: "0.4rem" }}>
@@ -1237,6 +1339,88 @@ export default function App() {
           </section>
         </div>
       )}
+
+      {/* Instagram / Mobile App Style Bottom Navigation Bar */}
+      <nav className="mobile-bottom-nav">
+        <button
+          type="button"
+          className={`bottom-nav-item ${activeCat === "daily_app" ? "active" : ""}`}
+          onClick={() => {
+            handleCategoryChange("daily_app");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          <span className="nav-icon">🔢</span>
+          <span>Calc</span>
+        </button>
+
+        <button
+          type="button"
+          className={`bottom-nav-item ${
+            activeCat !== "daily_app" && activeCat !== "quiz" ? "active" : ""
+          }`}
+          onClick={() => {
+            if (activeCat === "daily_app" || activeCat === "quiz") {
+              handleCategoryChange("primes");
+            }
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          <span className="nav-icon">🔁</span>
+          <span>Loop Lab</span>
+        </button>
+
+        <button
+          type="button"
+          className="bottom-nav-item"
+          onClick={() => {
+            if (activeCat === "quiz") handleCategoryChange("daily_app");
+            setTimeout(
+              () => traceSectionRef.current?.scrollIntoView({ behavior: "smooth" }),
+              80
+            );
+          }}
+        >
+          <span className="nav-icon">⚡</span>
+          <span>Trace</span>
+        </button>
+
+        <button
+          type="button"
+          className="bottom-nav-item"
+          onClick={() => {
+            if (activeCat === "quiz") handleCategoryChange("daily_app");
+            setTimeout(
+              () => historySectionRef.current?.scrollIntoView({ behavior: "smooth" }),
+              80
+            );
+          }}
+        >
+          <span className="nav-icon">📜</span>
+          <span>Saved</span>
+        </button>
+
+        <button
+          type="button"
+          className={`bottom-nav-item ${activeCat === "quiz" ? "active" : ""}`}
+          onClick={() => {
+            handleCategoryChange("quiz");
+            window.scrollTo({ top: 0, behavior: "smooth" });
+          }}
+        >
+          <span className="nav-icon">🏆</span>
+          <span>Quiz</span>
+        </button>
+
+        <button
+          type="button"
+          className="bottom-nav-item"
+          onClick={handleInstallAppClick}
+        >
+          <span className="nav-icon">📲</span>
+          <span>Install</span>
+        </button>
+      </nav>
     </div>
   );
 }

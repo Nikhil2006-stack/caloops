@@ -1,0 +1,9 @@
+{
+  "appId": "com.nikhil2006.caloops",
+  "appName": "CALOOPS",
+  "webDir": "docs",
+  "bundledWebRuntime": false,
+  "server": {
+    "androidScheme": "https"
+  }
+}

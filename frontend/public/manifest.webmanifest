@@ -1,0 +1,20 @@
+{
+  "name": "CALOOPS — Daily Calculator & Loop Lab",
+  "short_name": "CALOOPS",
+  "description": "Daily scientific calculator, logic & loop visualizer, and coding quiz mobile app.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#0b0f19",
+  "theme_color": "#0b0f19",
+  "categories": ["utilities", "education", "productivity"],
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
