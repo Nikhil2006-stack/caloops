@@ -1,6 +1,8 @@
 # CALOOPS v2.0 — Full-Stack MERN + Python Logic & Loops Scientific Calculator
 
-A complete **MERN Stack (MongoDB, Express.js, React, Node.js)** web application and **Python CLI suite** designed to help you master programming logic, boolean algebra, bitwise tricks, and every major loop paradigm (`for`, `while`, 2D/3D nested loops, Shunting-Yard RPN stack loops, numerical calculus loops, and convergence loops) with **real-time step-by-step execution tracing**.
+🌐 **Live 24/7 Public HTTPS App URL**: [https://nikhil2006-stack.github.io/caloops/](https://nikhil2006-stack.github.io/caloops/)
+
+A complete **MERN Stack (MongoDB, Express.js, React, Node.js)** web application and **Python CLI suite** designed to help you master programming logic, boolean algebra, bitwise tricks, and every major loop paradigm (`for`, `while`, 2D/3D nested loops, Shunting-Yard RPN stack loops, numerical calculus loops, and convergence loops) with **real-time step-by-step execution tracing** and **Login / Mobile OTP Verification**.
 
 ---
 

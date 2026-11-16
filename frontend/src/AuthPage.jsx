@@ -1,4 +1,5 @@
 import React, { useState, useRef } from "react";
+import { apiRequest } from "./apiClient.js";
 
 export default function AuthPage({ onAuthSuccess }) {
   // Modes: 'login' | 'mobile_otp' | 'register' | 'forgot'
@@ -46,13 +47,11 @@ export default function AuthPage({ onAuthSuccess }) {
     setInfo("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/login", {
+      const data = await apiRequest("/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier, password }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Login failed");
       onAuthSuccess(data.user, data.token);
     } catch (err) {
       setError(err.message);
@@ -68,7 +67,7 @@ export default function AuthPage({ onAuthSuccess }) {
     setInfo("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/register", {
+      const data = await apiRequest("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -78,8 +77,6 @@ export default function AuthPage({ onAuthSuccess }) {
           password: regPassword,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Registration failed");
       onAuthSuccess(data.user, data.token);
     } catch (err) {
       setError(err.message);
@@ -95,13 +92,11 @@ export default function AuthPage({ onAuthSuccess }) {
     setInfo("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/send-otp", {
+      const data = await apiRequest("/api/auth/send-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mobile: mobileNo }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Could not send OTP");
       setOtpSent(true);
       setOtpDigits(["", "", "", "", "", ""]);
       setInfo(`OTP sent to +91 ${data.mobile}. Please enter the 6-digit OTP below.`);
@@ -126,13 +121,11 @@ export default function AuthPage({ onAuthSuccess }) {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/verify-otp", {
+      const data = await apiRequest("/api/auth/verify-otp", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ mobile: mobileNo, otp: codeStr }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Invalid OTP");
       setSmsPopup(null);
       onAuthSuccess(data.user, data.token);
     } catch (err) {
@@ -182,13 +175,11 @@ export default function AuthPage({ onAuthSuccess }) {
     setInfo("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/forgot-password", {
+      const data = await apiRequest("/api/auth/forgot-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ identifier: forgotId }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Failed to send reset OTP");
       setResetOtpSent(true);
       setInfo(data.message);
       if (data.smsReceipt) {
@@ -211,7 +202,7 @@ export default function AuthPage({ onAuthSuccess }) {
     setError("");
     setLoading(true);
     try {
-      const res = await fetch("/api/auth/reset-password", {
+      const data = await apiRequest("/api/auth/reset-password", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -220,8 +211,6 @@ export default function AuthPage({ onAuthSuccess }) {
           newPassword,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error || "Password reset failed");
       setSmsPopup(null);
       onAuthSuccess(data.user, data.token);
     } catch (err) {

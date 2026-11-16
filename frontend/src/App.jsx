@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import AuthPage from "./AuthPage.jsx";
+import { apiRequest } from "./apiClient.js";
 
 const CATEGORIES = [
   {
@@ -143,10 +144,9 @@ export default function App() {
       setAuthChecking(false);
       return;
     }
-    fetch("/api/auth/me", {
+    apiRequest("/api/auth/me", {
       headers: { Authorization: `Bearer ${token}` },
     })
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
       .then((data) => {
         if (data?.user) {
           setUser(data.user);
@@ -174,12 +174,12 @@ export default function App() {
 
   const fetchHistoryAndStats = async () => {
     try {
-      const [hRes, sRes] = await Promise.all([
-        fetch(`/api/history?favoriteOnly=${filterFav}&limit=40`),
-        fetch("/api/stats"),
+      const [hData, sData] = await Promise.all([
+        apiRequest(`/api/history?favoriteOnly=${filterFav}&limit=40`),
+        apiRequest("/api/stats"),
       ]);
-      if (hRes.ok) setHistory(await hRes.json());
-      if (sRes.ok) setStats(await sRes.json());
+      if (Array.isArray(hData)) setHistory(hData);
+      if (sData) setStats(sData);
     } catch {
       // ignore offline during initial boot
     }
@@ -187,8 +187,8 @@ export default function App() {
 
   const fetchQuiz = async () => {
     try {
-      const res = await fetch("/api/quiz");
-      if (res.ok) setQuizData(await res.json());
+      const data = await apiRequest("/api/quiz");
+      if (data?.questions) setQuizData(data);
     } catch {
       // ignore
     }
@@ -304,7 +304,7 @@ export default function App() {
     setIsPlaying(false);
     try {
       const payloadInputs = buildPayloadInputs();
-      const res = await fetch("/api/calculate", {
+      const data = await apiRequest("/api/calculate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -313,10 +313,6 @@ export default function App() {
           inputs: payloadInputs,
         }),
       });
-      const data = await res.json();
-      if (!res.ok) {
-        throw new Error(data.error || "Calculation error");
-      }
       setCurrentResult(data);
       setActiveStepIdx(data.steps?.length ? data.steps.length - 1 : -1);
       if (typeof data.result === "number") {
@@ -331,17 +327,17 @@ export default function App() {
   };
 
   const handleToggleFavorite = async (id) => {
-    await fetch(`/api/history/${id}/favorite`, { method: "PATCH" });
+    await apiRequest(`/api/history/${id}/favorite`, { method: "PATCH" });
     fetchHistoryAndStats();
   };
 
   const handleDeleteRecord = async (id) => {
-    await fetch(`/api/history/${id}`, { method: "DELETE" });
+    await apiRequest(`/api/history/${id}`, { method: "DELETE" });
     fetchHistoryAndStats();
   };
 
   const handleClearHistory = async () => {
-    await fetch("/api/history", { method: "DELETE" });
+    await apiRequest("/api/history", { method: "DELETE" });
     fetchHistoryAndStats();
   };
 
@@ -350,13 +346,12 @@ export default function App() {
     const answersArr = quizData.questions.map((_, idx) =>
       quizAnswers[idx] !== undefined ? Number(quizAnswers[idx]) : -1
     );
-    const res = await fetch("/api/quiz/submit", {
+    const data = await apiRequest("/api/quiz/submit", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ username: quizUsername, answers: answersArr }),
     });
-    if (res.ok) {
-      const data = await res.json();
+    if (data?.entry) {
       setQuizResult(data);
       setQuizData((prev) => ({ ...prev, leaderboard: data.leaderboard }));
     }
