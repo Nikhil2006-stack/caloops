@@ -780,3 +780,49 @@ body {
   border-radius: 18px;
   padding: 1.4rem;
 }
+
+
+/* ============================================================================
+   REGISTERED EMAIL INBOX NOTIFICATION MESSAGE STYLES
+   ============================================================================ */
+
+.email-inbox-toast {
+  width: 100%;
+  max-width: 480px;
+  background: linear-gradient(135deg, #1e1b4b, #0f172a);
+  border: 2px solid var(--accent);
+  border-radius: 16px;
+  padding: 1.05rem 1.2rem;
+  margin-bottom: 1rem;
+  box-shadow: 0 14px 36px rgba(56, 189, 248, 0.28);
+}
+
+.email-toast-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: var(--accent);
+  margin-bottom: 0.3rem;
+}
+
+.email-toast-subject {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #f8fafc;
+  margin-bottom: 0.35rem;
+}
+
+.email-toast-body {
+  font-size: 0.82rem;
+  color: #cbd5e1;
+  margin-bottom: 0.75rem;
+  white-space: pre-line;
+  font-family: "JetBrains Mono", Consolas, monospace;
+}
+
+.email-toast-actions {
+  display: flex;
+  justify-content: flex-end;
+}

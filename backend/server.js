@@ -10,6 +10,8 @@ const {
   loginWithPassword,
   createAndSaveOtpForMobile,
   verifyMobileOtpAndLogin,
+  createAndSaveOtpForEmail,
+  verifyEmailOtpAndLogin,
   createPasswordResetOtp,
   resetPasswordWithOtp,
   verifyAuthToken,
@@ -24,6 +26,7 @@ const {
   getLeaderboard,
 } = require("./config/db");
 const { sendOtpSms } = require("./services/smsService");
+const { sendEmailOtp } = require("./services/emailService");
 const { executeOperation, QUIZ_QUESTIONS } = require("./engine/caloopsEngine");
 
 const app = express();
@@ -86,16 +89,46 @@ app.post("/api/auth/verify-otp", async (req, res) => {
   }
 });
 
-// Forgot Password — Send Reset OTP to Email / Mobile
+// Send 6-Digit OTP & One-Click Login Link to Registered Email ID
+app.post("/api/auth/send-email-otp", async (req, res) => {
+  try {
+    const { email, baseUrl } = req.body || {};
+    const { user, otpCode, email: cleanEmail } = await createAndSaveOtpForEmail(email);
+    const emailReceipt = await sendEmailOtp(cleanEmail, otpCode, "login", baseUrl);
+    return res.json({
+      message: `6-digit Email OTP sent to registered email ${cleanEmail}`,
+      email: cleanEmail,
+      user,
+      emailReceipt,
+    });
+  } catch (err) {
+    return res.status(400).json({ error: err.message || "Failed to send Email OTP." });
+  }
+});
+
+// Verify Registered Email OTP & Login to Project
+app.post("/api/auth/verify-email-otp", async (req, res) => {
+  try {
+    const { email, otp } = req.body || {};
+    const result = await verifyEmailOtpAndLogin({ email, otp });
+    return res.json(result);
+  } catch (err) {
+    return res.status(401).json({ error: err.message || "Email OTP verification failed." });
+  }
+});
+
+// Forgot Password — Send "Create / Update New Password" Link & OTP to Registered Email ID
 app.post("/api/auth/forgot-password", async (req, res) => {
   try {
-    const { identifier } = req.body || {};
+    const { identifier, baseUrl } = req.body || {};
     const { otpCode, mobile, email } = await createPasswordResetOtp(identifier);
+    const emailReceipt = await sendEmailOtp(email, otpCode, "reset_password", baseUrl);
     const smsReceipt = await sendOtpSms(mobile, otpCode, "Password Reset");
     return res.json({
-      message: `Password reset OTP dispatched to mobile ${mobile} and email ${email}`,
+      message: `Password reset email sent to ${email}. Click the email message to create & update your new password!`,
       mobile,
       email,
+      emailReceipt,
       smsReceipt,
     });
   } catch (err) {

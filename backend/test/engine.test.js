@@ -129,3 +129,27 @@ test("Authentication: Register, Password Login, Mobile OTP Login, and Forgot Pas
   });
   assert.equal(afterReset.user.username, username);
 });
+
+
+const {
+  createAndSaveOtpForEmail,
+  verifyEmailOtpAndLogin,
+} = require("../config/db");
+
+test("Registered Email OTP Login & Email Password Reset Flow", async () => {
+  await connectDB();
+  const email = `emailuser_${Date.now().toString().slice(-5)}@caloops.dev`;
+
+  // 1. Send OTP to Registered Email ID
+  const emailOtp = await createAndSaveOtpForEmail(email);
+  assert.equal(emailOtp.email, email);
+  assert.equal(emailOtp.otpCode.length, 6);
+
+  // 2. Verify Email OTP & Login
+  const loggedIn = await verifyEmailOtpAndLogin({
+    email,
+    otp: emailOtp.otpCode,
+  });
+  assert.equal(loggedIn.user.email, email);
+  assert.ok(loggedIn.token);
+});

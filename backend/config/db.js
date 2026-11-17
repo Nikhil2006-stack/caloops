@@ -362,8 +362,111 @@ async function verifyMobileOtpAndLogin({ mobile, otp }) {
   return { user: sanitizeUser(user), token: signAuthToken(user) };
 }
 
+async function createAndSaveOtpForEmail(emailInput) {
+  const cleanEmail = String(emailInput || "").trim().toLowerCase();
+  if (!cleanEmail || !cleanEmail.includes("@")) {
+    throw new Error("Please enter a valid registered email address.");
+  }
+
+  const otpCode = String(crypto.randomInt(100000, 999999));
+  const otpExpiresAt = new Date(Date.now() + 5 * 60 * 1000).toISOString();
+  const baseName = cleanEmail.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") || "user";
+
+  if (isMongoConnected) {
+    let user = await User.findOne({ email: cleanEmail });
+    if (!user) {
+      user = await User.create({
+        username: `${baseName}_${crypto.randomInt(100, 999)}`,
+        email: cleanEmail,
+        mobile: "9" + String(crypto.randomInt(100000000, 999999999)),
+        passwordHash: hashPassword(crypto.randomUUID()),
+        otpCode,
+        otpExpiresAt,
+      });
+    } else {
+      user.otpCode = otpCode;
+      user.otpExpiresAt = otpExpiresAt;
+      await user.save();
+    }
+    return { user: sanitizeUser(user.toObject()), otpCode, email: cleanEmail };
+  }
+
+  const store = readLocalStore();
+  let user = store.users.find((u) => u.email.toLowerCase() === cleanEmail);
+  if (!user) {
+    user = {
+      _id: crypto.randomUUID(),
+      username: `${baseName}_${crypto.randomInt(100, 999)}`,
+      email: cleanEmail,
+      mobile: "9" + String(crypto.randomInt(100000000, 999999999)),
+      passwordHash: hashPassword(crypto.randomUUID()),
+      otpCode,
+      otpExpiresAt,
+      createdAt: new Date().toISOString(),
+    };
+    store.users.push(user);
+  } else {
+    user.otpCode = otpCode;
+    user.otpExpiresAt = otpExpiresAt;
+  }
+  writeLocalStore(store);
+  return { user: sanitizeUser(user), otpCode, email: cleanEmail };
+}
+
+async function verifyEmailOtpAndLogin({ email, otp }) {
+  const cleanEmail = String(email || "").trim().toLowerCase();
+  const cleanOtp = String(otp || "").trim();
+  if (!cleanEmail || !cleanOtp) {
+    throw new Error("Email address and 6-digit OTP are required.");
+  }
+
+  if (isMongoConnected) {
+    const user = await User.findOne({ email: cleanEmail });
+    if (!user || !user.otpCode) {
+      throw new Error("No active OTP found for this email. Please click Send Email OTP first.");
+    }
+    if (new Date() > new Date(user.otpExpiresAt)) {
+      throw new Error("Email OTP has expired. Please request a new OTP.");
+    }
+    if (user.otpCode !== cleanOtp) {
+      throw new Error("Invalid Email OTP code entered.");
+    }
+    user.otpCode = null;
+    user.otpExpiresAt = null;
+    await user.save();
+    const obj = user.toObject();
+    return { user: sanitizeUser(obj), token: signAuthToken(obj) };
+  }
+
+  const store = readLocalStore();
+  const user = store.users.find((u) => u.email.toLowerCase() === cleanEmail);
+  if (!user || !user.otpCode) {
+    throw new Error("No active OTP found for this email. Please click Send Email OTP first.");
+  }
+  if (new Date() > new Date(user.otpExpiresAt)) {
+    throw new Error("Email OTP has expired. Please request a new OTP.");
+  }
+  if (user.otpCode !== cleanOtp) {
+    throw new Error("Invalid Email OTP code entered.");
+  }
+  user.otpCode = null;
+  user.otpExpiresAt = null;
+  writeLocalStore(store);
+  return { user: sanitizeUser(user), token: signAuthToken(user) };
+}
+
 async function createPasswordResetOtp(identifier) {
-  const user = await findUserByIdentifier(identifier);
+  let user = await findUserByIdentifier(identifier);
+  const raw = String(identifier || "").trim();
+  if (!user && raw.includes("@")) {
+    const created = await createAndSaveOtpForEmail(raw);
+    return {
+      user: created.user,
+      otpCode: created.otpCode,
+      mobile: created.user.mobile,
+      email: created.email,
+    };
+  }
   if (!user) {
     throw new Error("No account found matching that username, email, or mobile number.");
   }
@@ -570,6 +673,8 @@ module.exports = {
   loginWithPassword,
   createAndSaveOtpForMobile,
   verifyMobileOtpAndLogin,
+  createAndSaveOtpForEmail,
+  verifyEmailOtpAndLogin,
   createPasswordResetOtp,
   resetPasswordWithOtp,
   verifyAuthToken,

@@ -581,6 +581,36 @@
       "otpCode": null,
       "otpExpiresAt": null,
       "createdAt": "2026-11-16T15:37:11.524Z"
+    },
+    {
+      "_id": "46a05df7-e063-42bb-bd6c-221a4fd73e84",
+      "username": "tester_52064",
+      "email": "tester_52064@caloops.dev",
+      "mobile": "9988752064",
+      "passwordHash": "4adab148ce46eab46f17e15ee5c69107fdb0fd890517add90e666611d6571d95",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-16T16:24:12.106Z"
+    },
+    {
+      "_id": "ed42efb1-077e-43e8-af64-5d6e17ce4902",
+      "username": "tester_68288",
+      "email": "tester_68288@caloops.dev",
+      "mobile": "9988768288",
+      "passwordHash": "4adab148ce46eab46f17e15ee5c69107fdb0fd890517add90e666611d6571d95",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-17T15:34:28.334Z"
+    },
+    {
+      "_id": "d5299952-c94b-4f43-8ca7-ce60074e2265",
+      "username": "emailuser_70404_115",
+      "email": "emailuser_70404@caloops.dev",
+      "mobile": "9884865638",
+      "passwordHash": "69f751743a6fb2e12ce5baf6d83c5b369a8549b5dc332f80f5e7e9619960b87f",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-17T15:34:30.408Z"
     }
   ]
 }

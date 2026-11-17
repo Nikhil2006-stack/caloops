@@ -138,16 +138,101 @@ async function handleCloudFallback(path, options = {}) {
     return makeCloudAuthResponse(u);
   }
 
+  if (path === "/api/auth/send-email-otp" && method === "POST") {
+    const cleanEmail = String(body.email || "").trim().toLowerCase();
+    if (!cleanEmail || !cleanEmail.includes("@")) {
+      throw new Error("Please enter a valid registered email address.");
+    }
+    const otpCode = String(Math.floor(100000 + Math.random() * 900000));
+    let u = store.users.find((x) => x.email.toLowerCase() === cleanEmail);
+    if (!u) {
+      const baseName = cleanEmail.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") || "user";
+      u = {
+        _id: "u-" + Date.now(),
+        username: `${baseName}_${Math.floor(100 + Math.random() * 900)}`,
+        email: cleanEmail,
+        mobile: "9876543210",
+        password: "email_otp_user",
+      };
+      store.users.push(u);
+    }
+    u.otpCode = otpCode;
+    saveCloudStore(store);
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin + window.location.pathname
+        : "https://nikhil2006-stack.github.io/caloops/";
+    const magicLink = `${origin.replace(/\/$/, "")}/?action=email_login&email=${encodeURIComponent(
+      cleanEmail
+    )}&otp=${encodeURIComponent(otpCode)}`;
+    return {
+      message: `6-digit Email OTP sent to registered email ${cleanEmail}`,
+      email: cleanEmail,
+      user: u,
+      emailReceipt: {
+        delivered: true,
+        channel: "CALOOPS Registered Email Inbox Gateway",
+        to: cleanEmail,
+        subject: `[CALOOPS] Your Email Login OTP is ${otpCode} (Click to Login)`,
+        otpPreview: otpCode,
+        magicLink,
+        purpose: "login",
+        textBody: `Your CALOOPS Login OTP for ${cleanEmail} is ${otpCode}. Click the OTP button in this email message to log straight into the app!`,
+      },
+    };
+  }
+
+  if (path === "/api/auth/verify-email-otp" && method === "POST") {
+    const cleanEmail = String(body.email || "").trim().toLowerCase();
+    const u = store.users.find((x) => x.email.toLowerCase() === cleanEmail);
+    if (!u || !u.otpCode) throw new Error("Please click Send Email OTP first.");
+    if (String(u.otpCode) !== String(body.otp || "").trim()) {
+      throw new Error("Invalid 6-digit Email OTP entered.");
+    }
+    u.otpCode = null;
+    saveCloudStore(store);
+    return makeCloudAuthResponse(u);
+  }
+
   if (path === "/api/auth/forgot-password" && method === "POST") {
-    const u = findCloudUser(store, body.identifier);
+    let u = findCloudUser(store, body.identifier);
+    const rawId = String(body.identifier || "").trim().toLowerCase();
+    if (!u && rawId.includes("@")) {
+      const baseName = rawId.split("@")[0].replace(/[^a-zA-Z0-9_]/g, "") || "user";
+      u = {
+        _id: "u-" + Date.now(),
+        username: `${baseName}_${Math.floor(100 + Math.random() * 900)}`,
+        email: rawId,
+        mobile: "9876543210",
+        password: "reset_user",
+      };
+      store.users.push(u);
+    }
     if (!u) throw new Error("Account not found.");
     const otpCode = String(Math.floor(100000 + Math.random() * 900000));
     u.otpCode = otpCode;
     saveCloudStore(store);
+    const origin =
+      typeof window !== "undefined"
+        ? window.location.origin + window.location.pathname
+        : "https://nikhil2006-stack.github.io/caloops/";
+    const magicLink = `${origin.replace(/\/$/, "")}/?action=reset_password&email=${encodeURIComponent(
+      u.email
+    )}&otp=${encodeURIComponent(otpCode)}`;
     return {
-      message: `Reset OTP sent to ${u.mobile} (${u.email})`,
+      message: `Password reset email sent to ${u.email}. Click the email message to create & update your new password!`,
       mobile: u.mobile,
       email: u.email,
+      emailReceipt: {
+        delivered: true,
+        channel: "CALOOPS Registered Email Inbox Gateway",
+        to: u.email,
+        subject: `[CALOOPS] Create or Update Your New Password (OTP: ${otpCode})`,
+        otpPreview: otpCode,
+        magicLink,
+        purpose: "reset_password",
+        textBody: `Click this email message to create a new password and update your password for ${u.email}.`,
+      },
       smsReceipt: {
         delivered: true,
         channel: "CALOOPS Cloud SMS",
