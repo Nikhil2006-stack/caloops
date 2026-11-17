@@ -611,6 +611,26 @@
       "otpCode": null,
       "otpExpiresAt": null,
       "createdAt": "2026-11-17T15:34:30.408Z"
+    },
+    {
+      "_id": "a9c972d9-c41a-4400-bd2e-a95ba1da598e",
+      "username": "tester_92286",
+      "email": "tester_92286@caloops.dev",
+      "mobile": "9988792286",
+      "passwordHash": "4adab148ce46eab46f17e15ee5c69107fdb0fd890517add90e666611d6571d95",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-17T15:41:32.299Z"
+    },
+    {
+      "_id": "ceb38ae4-64c7-434a-9296-8fbfc126c6b0",
+      "username": "emailuser_94386_484",
+      "email": "emailuser_94386@caloops.dev",
+      "mobile": "9735282327",
+      "passwordHash": "a0014431791e50023dc3488683a7ea8a9b94e536fe5028142938fd5f966d6fb5",
+      "otpCode": null,
+      "otpExpiresAt": null,
+      "createdAt": "2026-11-17T15:41:34.392Z"
     }
   ]
 }
